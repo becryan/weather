@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>Melbourne Weather</title>
+    
+    <a href="{% url 'weather:tables' %}">tables </a>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>    
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <style>
+        #chart3 {
+  width: 60%;
+  height: 60%;
+  position: absolute;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #555;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #555;
+}
+
+.line {
+  fill: none;
+  stroke: #ef0d0c;
+  stroke-width: 1.5px;
+}
+            .body {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  margin: 1em auto 4em auto;
+  width: 960px;
+}
+
+   div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: auto;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+       pointer-events: none;}
+
+
+    text {font-family: sans-serif ;}
+    
+    div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: automatic;					
+    height: automatic;					
+    padding: 20px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+        }
+
+path { 
+    stroke: #0FA4D6;
+    stroke-width: 2;
+    fill: none;
+}
+    
+    path2 {stroke:#4BDB93;
+        stroke-width:2;
+        fill: none;}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+   }
+
+    .d3thing{width:100%;height:100%;}
+    div.tooltip {	
+    position: absolute;			
+    text-align: left;			
+    width: auto;	
+    height:auto;
+        font-weight:bold;
+    padding: 2px 2px 2px 2px;				
+    font: 14px sans-serif;		
+    background: white;	
+    border: 2px dotted black;		
+    border-radius: 2px;					
+}
+
+      </style>
+    </head>
+
+
+<body>
+    <h1> Weather chart </h1>
+    
+
+    <svg id="svg" width=900 height=500 ></svg>    
+</body>
+    
+<script type="text/javascript">
+    var dates=[];
+    var temps=[];
+    {% for dates in thing %}
+    dates.push("{{ dates.date|date:'Y-m-d H:i' }}");
+     temps.push(Number.parseFloat("{{ dates.apparent_temp }}"));
+
+     {% endfor %}
+
+    
+    var arrData=d3.zip(dates,temps);
+    var parseTime = d3.time.format("%Y-%m-%d %H:%M").parse;
+     var viewTime=d3.time.format("%d/%m %H:%M");
+      
+    var data = arrData.map(function(d) {
+      return {
+         date: parseTime(d[0]),
+         close: d[1]
+      };     
+     });
+
+     
+     var max_temp=d3.max(temps);
+     var min_temp=d3.min(temps);
+        
+var tooltip = d3.select("body").append("div")
+     .attr("class", "tooltip")
+     .style("opacity", 0); 
+
+var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+// Set the dimensions of the canvas / graph
+    var width=900;var height=300;
+var margin = {top: 40, right: 80, bottom: 80, left: 80},
+    w = width - margin.left - margin.right,
+    h = height- margin.top - margin.bottom;
+
+var x = d3.time.scale()
+.nice(d3.time.day)
+    .range([0, 0.85*width])
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+ var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+        
+var svg = d3.select("svg")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([d3.min(data,function(d){return d.close-5;}),d3.max(data, function(d) { return d.close+5; })]);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")  
+    .attr("font-size","11pt")
+      .call(xAxis);
+  svg.append("g")
+      .attr("class", "y axis")  
+    .attr("font-size","11pt")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end");
+
+  svg.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .style("stroke","#f4c842")
+      .style("stroke-width","1.5px")
+  .attr("d", line)
+              svg.selectAll("dot")
+        .data(data)
+      .enter().append("circle")
+        .attr("r", 3)              
+            .style("fill","#00b39a")
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.close); })
+.on("mouseover", function(d) {	
+            tooltip.transition()
+            .duration(500)
+            .style("opacity",1);
+            tooltip.transition()	
+                .duration(100)		
+                .style("opacity", .9);		
+    tooltip.html('Date-time: '+viewTime(d.date)+'<br>Temp: '+d.close)                 
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            tooltip.transition()		
+                .duration(500)		
+            .style("opacity", 0);});
+
+//});
+
+
+</script>
+
+</html>

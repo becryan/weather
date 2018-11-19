@@ -1,0 +1,40 @@
+
+<head>  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+          <script src="//code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+</head>
+<h1> Datatable </h1>
+    
+    {% block content %}
+
+<table cellpadding="0" cellspacing="0" border="0" id="example">
+ 
+<tr><thead><th>Date</th><th>Air temp</th><th>Apparent Temp</th>
+    </thead>
+    </tr>
+  <tbody>
+      </tbody>
+</table>
+{% endblock content %}
+
+
+<script type="text/javascript" language="javascript" class="init">
+     $(document).ready(function() {
+         $('#example').dataTable( {
+             "processing": true,
+             "ajax": {
+                 "processing": true,
+                 "url": "{% url 'weather:my_ajax_url' %}",
+                 "dataSrc": "data",
+                 "serverSide": "true",
+             },
+
+             "columns": [
+                     { "data": "data.date" },
+                     { "data": "data.apparent_temp" }
+                 ]
+         } );
+     } );
+ </script>
