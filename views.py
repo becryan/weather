@@ -34,10 +34,9 @@ def search(request):
 def myModel_asJson(request):
     object_list = weather.objects.all() #or any kind of queryset
     json = serializers.serialize('json', object_list)
-    #return HttpResponse(json, content_type='application/json')
-    #data=HttpResponse(json,content_type='application/json')
-    data = HttpResponse(json,content_type='application/json')
-   # data = {'data': test_all}
-    #print(test_all)
-    return render(request, 'weather/thing_template.html', {'data': data})
+    return = HttpResponse(json,content_type='application/json')
+
+def show(request):
+    return render(request, 'weather/thing_template.html')
+
  
