@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^tables/$',views.tables,name='tables'),
     url(r'^search/$',views.search,name='search'),
     url(r'^ajax/$',views.myModel_asJson,name='my_ajax_url'),
+    url(r'^datatables',views.show,name='datatables'),
 
 
  #   url(r'^tables/$', views.tables, name='tables'),
