@@ -39,4 +39,8 @@ def myModel_asJson(request):
 def show(request):
     return render(request, 'weather/thing_template.html')
 
- 
+ def show_image(request):
+    
+    filename='DSCN1846.jpg'
+    
+    return render(request, 'weather/an_image.html',context={'filename': filename})
