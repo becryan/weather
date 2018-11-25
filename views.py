@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from models import weather
+from models import weather, nice
 from django.http import JsonResponse
 from django.db import connections
 from django.core import serializers
 from .filters import WeatherFilter
 from django.http import HttpResponse
+from django.views.generic import TemplateView, ListView
 import json
+
 
 
 
@@ -28,19 +30,34 @@ def index(request):
 def search(request):
     user_list = weather.objects.all()
     user_filter = WeatherFilter(request.GET, queryset=user_list)
-    return render(request, 'weather/weather_list.html', {'filter': user_filter})
+    json=serializers.serialize('json',user_filter)
+    return HttpResponse(json,content_type='application/json')
+    #return render(request, 'weather/weather_list.html', {'filter': user_filter})
     
+def show_search(request):
+    return render(request,'weather/weather_list.html')
     
 def myModel_asJson(request):
-    object_list = weather.objects.all() #or any kind of queryset
+    object_list = weather.objects.all()
     json = serializers.serialize('json', object_list)
-    return = HttpResponse(json,content_type='application/json')
-
+    return HttpResponse(json, content_type='application/json')
+    #return HttpResponse(json, content_type='application/json', {'template':'weather/thing_template.html'}) 
+    #return render(request, 'weather/thing_template.html',{'json':data})
+    ##data=HttpResponse(json,content_type='application/json')
+    #data = HttpResponse(json,content_type='application/json')
+   # data = {'data': test_all}
+    #print(test_all)
+    #return render(request, 'weather/thing_template.html', {'data': data})
+    
 def show(request):
     return render(request, 'weather/thing_template.html')
 
- def show_image(request):
+def show_image(request):
     
     filename='DSCN1846.jpg'
     
     return render(request, 'weather/an_image.html',context={'filename': filename})
+    
+
+        
+ 
