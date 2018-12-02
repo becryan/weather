@@ -12,8 +12,9 @@ urlpatterns = [
     url(r'^search/$',views.search,name='search'),
     url(r'^ajax/$',views.myModel_asJson,name='my_ajax_url'),
     url(r'^datatables',views.show,name='datatables'),
-    url(r'^search_show',views.show_search,name='search_show'),
+   # url(r'^search_show',views.show_search,name='search_show'),
     url(r'^show_image',views.show_image,name='show_image'),
+    url(r'^search_form/$',views.search_form,name='search-form'),
 
 
  #   url(r'^tables/$', views.tables, name='tables'),

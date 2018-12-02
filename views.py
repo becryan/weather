@@ -28,14 +28,32 @@ def index(request):
     
     
 def search(request):
-    user_list = weather.objects.all()
-    user_filter = WeatherFilter(request.GET, queryset=user_list)
-    json=serializers.serialize('json',user_filter)
-    return HttpResponse(json,content_type='application/json')
+    if 'q' in request.GET:
+        message='You searched for :%r' % request.GET['q']
+        q = request.GET['q']
+        
+    #if 'nness' in request.GET:
+    #    nness=request.GET['nness']
+        
+        if q:
+           # if nness:
+                #weat =weather.objects.filter(apparent_temp__icontains=q)
+           #     nicet = nice.objects.filter(niceness__icontains=nness).values('id')
+            weather_nice = weather.objects.filter(apparent_temp__icontains=q).select_related('niceness_desc')
+            #else:
+            #    weather_nice = weather.objects.filter(apparent_temp__icontaines=q)
+            return render(request, 'weather/results.html',{'filter':weather_nice})
+    else:
+        return HttpResponse('please submit a search form')
+    #user_list = weather.objects.all()
+    #user_filter = WeatherFilter(request.GET, queryset=user_list)
+    #json=serializers.serialize('json',user_filter)
+    #return HttpResponse(json,content_type='application/json')
     #return render(request, 'weather/weather_list.html', {'filter': user_filter})
-    
-def show_search(request):
-    return render(request,'weather/weather_list.html')
+
+
+#def show_search(request):
+#    return render(request,'weather/weather_list.html')
     
 def myModel_asJson(request):
     object_list = weather.objects.all()
@@ -57,6 +75,9 @@ def show_image(request):
     filename='DSCN1846.jpg'
     
     return render(request, 'weather/an_image.html',context={'filename': filename})
+
+def search_form(request):
+    return render(request,'weather/search_form2.html')
     
 
         

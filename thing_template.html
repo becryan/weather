@@ -1,7 +1,6 @@
 
-<head> 
-  
-  <script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<head>  
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.flash.min.js"></script>
@@ -34,12 +33,17 @@
                              { "data": "pk" },
                              { "data": "fields.date", type:'date-dd-mm-yyyy' },
                              { "data": "fields.apparent_temp" },
-                             { "data": "fields.air_temp" }
+                             { "data": "fields.air_temp" },
+                         {"data": "fields.niceness_desc"},
                          ],
                    
                  });
              });
-              $(document).ready(function() {
+
+                
+                
+
+$(document).ready(function() {
     // Setup - add a text input to each footer cell
     $('#postsTable tfoot th').each( function () {
         var title = $(this).text();
@@ -62,6 +66,9 @@
         } );
     } );
 } );
+
+
+                
          </script>
 </head>
 <h1> Datatable </h1>
@@ -75,15 +82,17 @@
                          <th>Date</th>
                          <th>ApparentTemp</th>
                          <th>Air Temp</th>
+                         <th>Niceness</th>
                      </tr>
                  </thead>
                  <tbody></tbody>
-                              <tfoot>
+                <tfoot>
             <tr>
                 <th>Id</th>
                 <th>Date</th>
                 <th>ApparentTemp</th>
                 <th>Air Temp</th>
+                <th>Niceness</th>
   
                     </tr></tfoot>
             </table>

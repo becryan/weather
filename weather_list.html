@@ -9,29 +9,71 @@
 
 <h1> this is search </h1>
 {% block content %}
-  <form method="get">
+  <form action="/weather/search/" method="get">
     {{ filter.form.as_p }}
     <button type="submit">Search</button>
   </form>
+    {% endblock %}
 
-  <table id="example" class="table table-striped table-bordered" data-server-side="true" data-ajax="/weather/?format=datatables">
-     <tr> <thead><th>Date</th><th>Air temp</th><th>Apparent Temp</th></thead></tr>
-  <tbody>{% for user in filter.qs %}
+            <script>
+          //   jQuery(document).ready(function($jquery) {
+          //       $jquery('#postsTable').dataTable({
+          //           "iDisplayLength": 5,
+          //           "ajax": {
+          //               "processing": true,
+          //               "url": "{% url 'weather:search' %}",
+          //               "dataSrc": ""
+          //           },
+ 
+            //         "columns": [
+            //                 { "data": "pk" },
+            //                 { "data": "fields.date", type:'date-dd-mm-yyyy' },
+            //                 { "data": "fields.apparent_temp" },
+            //                 { "data": "fields.air_temp" }
+            //             ]
+            //     });
+            // });
+         </script>
+
+<h1> Datatable </h1>
+    <a href="#" data-source="popularity" class="copyToClipboard" style="float: right;">Copy to Clipboard</a>
+  <table id="thing">
+      <thead>
+          <th>date</th><th>apparent temp</th>
+      </thead>
       
-      <tr><td>{{ user.date }}</td><td>{{ user.air_temp }}</td><td>{{ user.apparent_temp }}</td></tr>
-          
+  {% for user in filter.qs %}
+      <tr><td>{{ user.date }} </td><td>{{ user.apparent_temp }}</td></tr>
   {% endfor %}
-      </tbody>
-  </table>
-{% endblock %}
-</body>
+      </table>
+    
+    <body>
+        <div class="container">
+            <table id="postsTable" class="table">
+                 <thead>
+                     <tr>
+                         <th>Id</th>
+                         <th>Date</th>
+                         <th>ApparentTemp</th>
+                         <th>Air Temp</th>
+                     </tr>
+                 </thead>
 
-      
-
-<script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        order: [[ 2, 'desc' ], [ 0, 'asc' ]]
-    } );
-} );
-</script>
+                 <tbody><tr></tbody>
+            </table>
+        </div>
+    </body>
+    
+    <script>
+        $('.copyToClipboard').click(function(e) {
+	
+    e.preventDefault();		
+    copyToClipboard($(this).data('source'));
+});
+  
+function copyToClipboard(tableId){ 
+    var textRange = document.body.createTextRange(); 
+    textRange.moveToElementText(document.getElementById('#thing')); 
+    textRange.execCommand("Copy");
+    </script>
+}

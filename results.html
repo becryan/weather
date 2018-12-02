@@ -1,0 +1,22 @@
+{% include 'weather/search_form2.html' %}
+
+ <body>
+        <div class="container">
+            <table id="postsTable" class="table">
+                 <thead>
+                     <tr>
+                         <th>Id</th>
+                         <th>Date</th>
+                         <th>ApparentTemp</th>
+                         <th>Air Temp</th>
+                         <th>Niceness</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                {% for f in filter %}
+                     <tr><td>{{ f.id }}</td><td>{{f.date}}</td><td>{{f.apparent_temp}}</td><td>{{f.air_temp}}</td><td>{{f.niceness_desc.niceness }}</td></tr>{% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </body>
